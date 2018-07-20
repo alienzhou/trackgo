@@ -2,15 +2,17 @@
   "name": "legotrack",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "dependencies": {
     "@types/node": "^10.5.2",
     "fingerprintjs2": "^1.8.1",
     "optimal-select": "^4.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "rollup-plugin-typescript": "^0.8.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c"
   },
   "author": "",
   "license": "ISC"

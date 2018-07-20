@@ -17,12 +17,13 @@ function collectClick(e: MouseEvent): TrackClickEvent {
     const selector = select(e.target);
     const {screenX, screenY} = e;
     
-    const props = {
+    let props = {
         selector,
         screenX,
-        screenY,
-        ...collectCommonInfo()
+        screenY
     };
+
+    props = Object.assign(props, collectCommonInfo());
 
     const event = new TrackClickEvent(props);
 
