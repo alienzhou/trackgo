@@ -15,7 +15,8 @@ export default class Storage extends EventEmit {
 
         // 监听存储事件，将track对象存储至存储器
         this.addEventListener(Storage.SAVE_EVENT_NAME, (e: any) => {
-            this.storage.save(<Track>e.track);
+            let track:Track = <Track>e.detail;
+            this.storage.save(track);
         });
     }
 }

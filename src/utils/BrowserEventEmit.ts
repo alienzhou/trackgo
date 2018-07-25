@@ -3,8 +3,8 @@ export default class EventEmit extends EventTarget {
         super();
     }
 
-    emit(type: string, data?: any): void {
-        let e = new CustomEvent(type, data);
-        this.dispatchEvent(e)
+    emit(type: string, detail?: any): void {
+        let e = new CustomEvent(type, {detail});
+        this.dispatchEvent(e);
     }
 }
