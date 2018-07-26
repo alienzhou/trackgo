@@ -8,4 +8,7 @@ const app = new Koa();
 const router = new Router();
 
 app.use(serve(`${__dirname}/page`));
-app.listen(port, () => console.log(`trackgo example is running on port: ${port}`));
+app.listen(port, () => {
+    console.log(`trackgo example is running on port: ${port}`);
+    process.send && process.send(port)
+});

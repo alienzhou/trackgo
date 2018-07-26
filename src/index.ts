@@ -1,7 +1,7 @@
 import TrackUser from './entity/User';
-import {EventType} from './entity/event';
-import Collector, {EventInfo} from './collector';
-import Storage from './storage';
+import {EventType} from './entity/event/index';
+import Collector, {EventInfo} from './collector/index';
+import Storage from './storage/index';
 import Track from './entity/Track';
 
 const user = new TrackUser();
