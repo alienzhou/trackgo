@@ -1,6 +1,5 @@
 const path = require('path');
 const childProcess = require('child_process');
-const opn = require('opn');
 const rollup = require('rollup');
 const typescript = require('rollup-plugin-typescript2'); // notice ts version (https://github.com/ezolenko/rollup-plugin-typescript2/issues/88)
 const commonjs = require('rollup-plugin-commonjs');
@@ -8,6 +7,8 @@ const resolve = require('rollup-plugin-node-resolve'); // resolve external packa
 const babel = require('rollup-plugin-babel');
 const { uglify } = require('rollup-plugin-uglify');
 const chalk = require('chalk');
+const browserSync = require('browser-sync').create();
+
 
 // const production = !process.env.ROLLUP_WATCH;
 const production = process.argv[2] === 'prod';
@@ -75,9 +76,12 @@ async function buildBundle() {
 
 
 function watchBundle() {
+    let first = true;
+
     const cp = childProcess.fork(path.resolve(__dirname, '../example/server.js'), {silent: true});
     cp.on('message', e => {
-        console.log(chalk.green(`【server】example server is running on port: ${e}`));
+        const port = e;
+        console.log(chalk.green(`【server】example server is running on port: ${port}`));
         
         const watcher = rollup.watch(watchOptions);
 
@@ -90,6 +94,19 @@ function watchBundle() {
             
                 case 'END':
                     console.log(chalk.magenta('【rollup】bundle end, rollup is watching...'));
+
+                    if (!first) {
+                        browserSync.reload();
+                        return;
+                    }
+
+                    browserSync.init({
+                        proxy: '127.0.0.1:8080',
+                        notify: true,
+                        port: port
+                    });
+                    first = false;
+
                     break;
     
                 case 'ERROR':
@@ -100,10 +117,12 @@ function watchBundle() {
                     break;
             }
         });
-    
-        setTimeout(() => opn(`http://127.0.0.1:${e}`), 1500);
     });
 }
 
 // 根据参数进行生产环境打包或开发环境打包监听
 production ? buildBundle() : watchBundle();
+
+process.on('exit', () => {
+    browserSync.exit();
+});
