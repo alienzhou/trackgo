@@ -29,7 +29,7 @@
   "scripts": {
     "build": "node script/bundle.js prod",
     "dev": "node script/bundle.js dev",
-    "serve": "node ./example/server.js"
+    "example": "node ./example/server.js"
   },
   "author": "",
   "license": "MIT"
