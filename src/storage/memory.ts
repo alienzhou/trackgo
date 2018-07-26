@@ -4,7 +4,7 @@ import Track from '../entity/Track';
 export default class Storage extends EventEmit {
     public tracks: Track[];
 
-    constructor(tracks?: Track[] | null) {
+    constructor(tracks?: Track[]) {
         super();
 
         this.tracks = tracks || [];

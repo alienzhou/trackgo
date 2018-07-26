@@ -1,43 +1,6 @@
-import { select } from 'optimal-select';
-import {TrackClickEvent, TrackViewEvent, TrackEvent, EventType} from '../entity/event';
+import { TrackEvent, EventType } from '../entity/event';
+import { collectClick, collectView } from './tool';
 import EventEmit from '../utils/BrowserEventEmit';
-
-function collectCommonInfo(): Object {
-    const global = window;
-    const path: string = global.location.pathname;
-    const refer: string = global.document.referrer;
-
-    return {
-        path,
-        refer
-    };
-}
-
-function collectClick(e: MouseEvent): TrackClickEvent {
-    const selector = select(e.target);
-    const {screenX, screenY} = e;
-    
-    const props = {
-        selector,
-        screenX,
-        screenY,
-        ...collectCommonInfo()
-    };
-
-    const event = new TrackClickEvent(props);
-
-    return event;
-}
-
-function collectView(): TrackViewEvent {
-    const event = new TrackViewEvent(collectCommonInfo());
-    return event;
-}
-
-function collectUserinfo() {
-    const global = window;
-    const userAgent: string = global.navigator.userAgent;
-}
 
 export interface EventInfo {
     type: EventType,
@@ -75,7 +38,7 @@ export default class Collector extends EventEmit {
         this.emit(Collector.COLLECT_EVENT_NAME, data);
     }
 
-    startCollector() {
+    startCollect() {
         const isBrowser = !!window;
 
         if (this.isInclude(EventType.click) && isBrowser) {
@@ -92,13 +55,13 @@ export default class Collector extends EventEmit {
         }
     }
 
-    stopCollector(type: EventType) {
+    stopCollect(type: EventType) {
         if (EventType.click === type) {
             document.removeEventListener('click', this.listeners[EventType.click]);
         }
     }
 
     stopAllCollector() {
-        this.types.forEach(this.stopCollector);
+        this.types.forEach(this.stopCollect);
     }
 }
